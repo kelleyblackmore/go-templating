@@ -132,6 +132,13 @@ The template engine supports:
 
 - Go 1.16 or higher
 
+## Security Note
+
+This is a demonstration project. In production environments:
+- Never hardcode passwords or sensitive data in source code
+- Use environment variables, configuration files, or secure credential management systems
+- Consider using `html/template` instead of `text/template` when generating HTML to prevent injection attacks
+
 ## License
 
 This is a demonstration project for educational purposes.
