@@ -60,12 +60,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error creating output file: %v", err)
 	}
-	defer outputFile.Close()
 
 	// Execute the template with the configuration data and write to the output file
 	err = tmpl.Execute(outputFile, cfg)
 	if err != nil {
+		outputFile.Close()
 		log.Fatalf("Error executing template: %v", err)
+	}
+
+	// Close the file and check for errors
+	if err := outputFile.Close(); err != nil {
+		log.Fatalf("Error closing output file: %v", err)
 	}
 
 	log.Println("Configuration file generated successfully!")
