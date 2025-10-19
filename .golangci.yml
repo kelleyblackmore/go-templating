@@ -20,8 +20,8 @@ linters:
     - unconvert
 
 linters-settings:
-  govet:
-    check-shadowing: true
+  # govet: empty configuration - 'check-shadowing' option is not supported
+  govet: {}
   gocyclo:
     min-complexity: 15
   gocritic:
