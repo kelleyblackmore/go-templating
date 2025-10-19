@@ -49,12 +49,18 @@ func Example_rangeLoop() {
 func TestCustomTemplateFunctions(t *testing.T) {
 	// Define custom functions
 	funcMap := template.FuncMap{
-		"upper": strings.ToUpper,
-		"lower": strings.ToLower,
-		"title": strings.Title,
+		"upper":   strings.ToUpper,
+		"lower":   strings.ToLower,
+		"reverse": func(s string) string {
+			runes := []rune(s)
+			for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+				runes[i], runes[j] = runes[j], runes[i]
+			}
+			return string(runes)
+		},
 	}
 	
-	tmplText := "{{upper .Name}} - {{lower .Status}} - {{title .Message}}"
+	tmplText := "{{upper .Name}} - {{lower .Status}} - {{reverse .Message}}"
 	
 	tmpl, err := template.New("custom").Funcs(funcMap).Parse(tmplText)
 	if err != nil {
@@ -64,7 +70,7 @@ func TestCustomTemplateFunctions(t *testing.T) {
 	data := map[string]string{
 		"Name":    "john",
 		"Status":  "ACTIVE",
-		"Message": "hello world",
+		"Message": "hello",
 	}
 	
 	var buf strings.Builder
@@ -73,7 +79,7 @@ func TestCustomTemplateFunctions(t *testing.T) {
 		t.Fatalf("Failed to execute template: %v", err)
 	}
 	
-	expected := "JOHN - active - Hello World"
+	expected := "JOHN - active - olleh"
 	if buf.String() != expected {
 		t.Errorf("Expected %q, got %q", expected, buf.String())
 	}
