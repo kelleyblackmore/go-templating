@@ -17,15 +17,29 @@ This project demonstrates how to use Go templates to dynamically generate config
 
 ```
 .
-├── config.tmpl           # Template file with configuration placeholders
-├── main.go              # Go code to process the template
-├── go.mod               # Go module definition
-└── generated_config.conf # Output file (generated at runtime)
+├── cmd/
+│   └── go-templating/         # Main application entry point
+│       └── main.go
+├── internal/
+│   ├── config/                # Configuration data structures
+│   │   └── config.go
+│   └── template/              # Template processing logic
+│       └── processor.go
+├── templates/
+│   └── config.tmpl            # Template file with configuration placeholders
+├── .github/
+│   └── workflows/             # GitHub Actions workflows
+│       ├── ci.yml             # Build and test workflow
+│       └── lint.yml           # Linting workflow
+├── Makefile                   # Build automation
+├── .golangci.yml             # Linter configuration
+├── go.mod                     # Go module definition
+└── generated_config.conf      # Output file (generated at runtime)
 ```
 
 ## How It Works
 
-### 1. Template File (`config.tmpl`)
+### 1. Template File (`templates/config.tmpl`)
 
 The template file uses Go template syntax with placeholders:
 
@@ -40,7 +54,7 @@ Port: {{.Database.Port}}
 ...
 ```
 
-### 2. Data Structure
+### 2. Data Structure (`internal/config/config.go`)
 
 A Go struct defines the configuration data:
 
@@ -62,7 +76,7 @@ type Config struct {
 }
 ```
 
-### 3. Template Processing
+### 3. Template Processing (`internal/template/processor.go`)
 
 The application:
 1. Parses the template file using `template.ParseFiles()`
@@ -72,15 +86,44 @@ The application:
 
 ## Usage
 
+### Using Make (Recommended)
+
+```bash
+# Display available commands
+make help
+
+# Build the application
+make build
+
+# Run tests
+make test
+
+# Run linters
+make lint
+
+# Format code
+make fmt
+
+# Build and run
+make run
+
+# Clean build artifacts
+make clean
+```
+
 ### Build the Application
 
 ```bash
-go build
+make build
+# or
+go build -o go-templating ./cmd/go-templating
 ```
 
 ### Run the Application
 
 ```bash
+make run
+# or
 ./go-templating
 ```
 
@@ -108,9 +151,9 @@ EnableFeatureB: false
 
 To generate different configurations:
 
-1. **Modify the template**: Edit `config.tmpl` to change the structure
-2. **Update data**: Modify the `cfg` variable in `main.go` to use different values
-3. **Change output**: Update the output filename in `main.go`
+1. **Modify the template**: Edit `templates/config.tmpl` to change the structure
+2. **Update data**: Modify the configuration in `internal/config/config.go`
+3. **Change output**: Update the output filename in `cmd/go-templating/main.go`
 
 ## Key Concepts
 
@@ -130,7 +173,40 @@ The template engine supports:
 
 ## Requirements
 
-- Go 1.16 or higher
+- Go 1.22 or higher
+- Make (optional, for using Makefile targets)
+
+## Development
+
+### Project Structure
+
+This project follows Go best practices with a production-grade folder structure:
+
+- **`cmd/`**: Contains application entry points
+- **`internal/`**: Private application code not meant to be imported by other projects
+- **`templates/`**: Template files used by the application
+- **`.github/workflows/`**: GitHub Actions CI/CD workflows
+
+### Continuous Integration
+
+The project includes GitHub Actions workflows for:
+
+- **Linting**: Runs `go vet`, `gofmt`, and `golangci-lint` on every push and PR
+- **CI**: Builds and tests the code across multiple Go versions
+
+### Code Quality
+
+Run linters before committing:
+
+```bash
+make lint
+```
+
+Format your code:
+
+```bash
+make fmt
+```
 
 ## Security Note
 
