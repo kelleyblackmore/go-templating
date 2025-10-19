@@ -1,0 +1,32 @@
+# Configuration File
+# Generated from template
+
+## Application Settings
+AppName: {{.AppName}}
+Version: {{.Version}}
+Environment: {{.Environment}}
+
+## Server Configuration
+Server:
+  Host: {{.Server.Host}}
+  Port: {{.Server.Port}}
+  Timeout: {{.Server.Timeout}}s
+
+## Database Configuration
+Database:
+  Driver: {{.Database.Driver}}
+  Host: {{.Database.Host}}
+  Port: {{.Database.Port}}
+  Name: {{.Database.Name}}
+  Username: {{.Database.Username}}
+
+## Features
+{{- if .Features}}
+Features:
+{{- range .Features}}
+  - {{.}}
+{{- end}}
+{{- end}}
+
+## Debug Mode
+Debug: {{.Debug}}
